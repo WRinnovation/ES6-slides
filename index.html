@@ -8,10 +8,41 @@
 	<title>Intro to ES6</title>
 
 	<link rel="stylesheet" href="css/reveal.css">
-	<link rel="stylesheet" href="css/theme/black.css">
+	<link rel="stylesheet" href="css/theme/simple.css">
 
 	<!-- Theme used for syntax highlighting of code -->
-	<link rel="stylesheet" href="lib/css/zenburn.css">
+	<link rel="stylesheet" href="lib/css/monokai-sublime.css">
+
+	<!-- custom style -->
+	<style>
+		.hljs {
+			background: #222222;
+			display: inline-block;
+		}
+		.reveal pre {
+			display: inline-block;
+			width: auto;
+			box-shadow: none;
+		}
+		.wide-slide {
+			left: -15% !important;
+			width: 130% !important;
+		}
+		.w-left {
+			left: -8.33%;
+			float: left;
+			width: 50%;
+		}
+
+		.w-right {
+			left: 31.25%;
+			float: right;
+			width: 50%;
+		}
+		.important {
+			color: #fa2771;
+		}
+	</style>
 
 	<!-- Printing and PDF exports -->
 	<script>
@@ -22,7 +53,12 @@
 		document.getElementsByTagName('head')[0].appendChild(link);
 	</script>
 	<script src="plugin/highlight/highlight.js"></script>
-	<script>hljs.initHighlightingOnLoad();</script>
+	<script>
+		hljs.configure({
+			tabReplace: '  '
+		});
+		hljs.initHighlightingOnLoad();
+	</script>
 </head>
 
 <body>
@@ -38,7 +74,7 @@
 					<h3>ES6 = ECMAScript 6 = ES2015</h3>
 					<p>
 						è la sesta edizione di un linguaggio di programmazione standardizzato e mantenuto da Ecma International.
-						L'implementazione più conosciuta di questo linguaggio è <span style="color:yellow">JavaScript.</style>
+						L'implementazione più conosciuta di questo linguaggio è <span class="important">JavaScript.</style>
 					</p>
 					
 			</textarea>
@@ -54,7 +90,7 @@
 			<section>
 				<section data-markdown>
 					<textarea data-template>	
-						<img src="./images/nodejs-new-pantone-white.png" alt="node-logo" class="plain" style="max-width:30%;background:none">
+						<img src="./images/nodejs-new-pantone-black.png" alt="node-logo" class="plain" style="max-width:30%;background:none">
 						<p>è un runtime Javascript costruito sul motore JavaScript V8 di Chrome.</p>
 					</textarea>
 				</section>
@@ -62,13 +98,13 @@
 					<p>
 						V8 is Google’s open source high-performance JavaScript engine, written in C++ and used in Google Chrome, the open source
 						browser from Google, and in Node.js, among others.
-						<span style="color:yellow">It implements ECMAScript as specified in ECMA-262.</span>
+						<span class="important">It implements ECMAScript as specified in ECMA-262.</span>
 					</p>
 				</section>
 			</section>
 			<section>
 				<p>il suo gestore di pacchetti si chiama
-					<span style="color:yellow">npm</style>
+					<span class="important">npm</style>
 				</p>
 				<code>npm install --save express</code>
 			</section>
@@ -86,9 +122,10 @@
 				<p>arrow functions</p>
 				<code>() => {...}</code>
 			</section>
-			<section>
-				<h3>ES5</h3>
-				<pre><code data-trim data-noescape class="javascript" >
+			<section class="wide-slide">
+				<div class="w-left">
+					<h3>ES5</h3>
+					<pre><code data-trim data-noescape class="javascript" >
 						function(pizza, sliceNum) {
 							var slices = [];
 							for (var i = 0; i < sliceNum; i++) {
@@ -97,9 +134,8 @@
 							return slices;
 						}
 					</code></pre>
-			</section>
-			<section>
-				<section data-background-color="#FFFFFF">
+				</div>
+				<div class="w-right">
 					<h3>ES6</h3>
 					<pre><code data-trim data-noescape class="javascript">
 							(pizza, sliceNum) => {
@@ -110,7 +146,9 @@
 								return slices;
 							}
 						</code></pre>
-				</section>
+				</div>
+			</section>
+			<section>
 				<section>
 					<p>l'utilizzo ideale è quando si deve passare una funzione come argomento di un'altra funzione:</p>
 					<pre><code data-trim data-noescape class="javascript">
@@ -118,8 +156,6 @@
 							console.log('Ordered ' + pizza + ' for ' + totalCost);
 						});
 					</code></pre>
-				</section>
-				<section>
 					<ul>
 						<li>se l'argomento è solo uno allora le parentesi non sono necessarie</li>
 						<li>se l'espressione è solo una allora puoi eliminare le parentesi e il return statement</li>
