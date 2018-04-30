@@ -51,6 +51,10 @@
 		.w-no-decoration {
 			text-decoration: none !important;
 		}
+
+		.w-bold {
+			font-weight: bold !important;
+		}
 	</style>
 
 	<!-- Printing and PDF exports -->
@@ -106,25 +110,24 @@
 				<p>il suo gestore di pacchetti si chiama
 					<span class="w-important">npm</style>
 				</p>
-				<code>npm install --save express</code>
+				<code>npm install express</code>
 			</section>
 			<section>
 				<p>Cosa è cambiato?</p>
 				<ul>
-					<li>funzioni</li>
-					<li>oggetti</li>
-					<li>promises & collections</li>
-					<li>iterabili & generatori</li>
+					<li>funzioni & oggetti</li>
+					<li>promises & funzioni asincrone</li>
+					<li>collections, iteratori & generatori</li>
 				</ul>
 			</section>
 			<section>
-				<h2>Funzioni</h2>
-				<p class="w-important">arrow functions</p>
-				<code>() => {...}</code>
+				<h2>Funzioni & Oggetti</h2>
 			</section>
 			<section class="wide-slide">
+				<p class="w-important">arrow functions</p>
+				<p>() => {...}</p>
 				<div class="w-left">
-					<h3>ES5</h3>
+					<h4>ES5</h4>
 					<pre><code data-trim data-noescape class="javascript" >
 						function(pizza, sliceNum) {
 							var slices = [];
@@ -136,7 +139,7 @@
 					</code></pre>
 				</div>
 				<div class="w-right">
-					<h3>ES6</h3>
+					<h4>ES6</h4>
 					<pre><code data-trim data-noescape class="javascript">
 							(pizza, sliceNum) => {
 								var slices = [];
@@ -149,68 +152,49 @@
 				</div>
 			</section>
 			<section class="wide-slide">
-				<h4>non associazione di <span class="w-important">this</span></h4>
+				<p>non associazione di <span class="w-important">this</span></p>
 				<div class="w-left">
 					<h4>ES5</h4>
-					<pre>
-						<code data-trim data-noescape class="javascript">
-							function Person() {
-								this.age = 0;
-							
-								setInterval(function growUp() {
-									this.age++;
-								}, 1000);
-							}
-						</code>
-					</pre>
-					<pre>
-						<code data-trim data-noescape class="console">
-							> var p = new Person();
-							> p.age
-							0
-							> p.age
-							0
-							> p.age
-							0
-							...
-						</code>
-					</pre>
+					<pre><code data-trim data-noescape class="javascript">
+						function Person() {
+							this.age = 0;
+						
+							setInterval(function growUp() {
+								this.age++;
+							}, 1000);
+						}
+
+						var p = new Person();
+						p.age // 0
+						p.age // 0
+						p.age // 0
+					</code></pre>
 				</div>
 				<div class="w-right">
 					<h4>ES6</h4>
-					<pre>
-						<code data-trim data-noescape class="javascipt">
-							function Person() {
-								this.age = 0;
-							
-								setInterval(() => {
-									this.age++;
-								}, 1000);
-							}
-						</code>
-					</pre>
-					<pre>
-						<code data-trim data-noescape class="console">
-							> var p = new Person();
-							> p.age
-							1
-							> p.age
-							2
-							> p.age
-							3
-							...
-						</code>
-					</pre>
+					<pre><code data-trim data-noescape class="javascipt">
+						function Person() {
+							this.age = 0;
+						
+							setInterval(() => {
+								this.age++;
+							}, 1000);
+						}
+					
+						var p = new Person();
+						p.age // 1
+						p.age // 2
+						p.age // 3
+					</code></pre>
 				</div>
 			</section>
 			<section>
-				<h4>sintassi più compatta</h4>
+				<p>sintassi più compatta</p>
 				<pre><code data-trim data-noescape class="javascript">
 					var filtered = [12, 13, 14].map(val => { return val > 12; })
 				</code></pre>
 			</section>
 			<section class="wide-slide">
-				<h2>Funzioni</h2>
 				<p class="w-important">default parameters</p>
 				<div class="w-left">
 					<h4>ES5</h4>
@@ -231,7 +215,6 @@
 				</div>				
 			</section>
 			<section class="wide-slide">
-				<h2>Funzioni</h2>
 				<p><span class="w-important">rest parameters</span> & <span class="w-important">spread syntax</span></p>
 				<div class="w-left">
 					<pre><code data-trim data-noescape class="javascript">
@@ -260,21 +243,22 @@
 			</section>
 			<section class="wide-slide">
 				<div class="w-left">
-					<h3>rest parameters</h3>
+					<p class="w-bold">rest parameters</p>
 					<br>
 					<p>Usati nella dichiarazione<br>della funzione</p>
 					<p>Combina argomenti<br>senza nome</p>
 				</div>
 				<div class="w-right">
-					<h3>spread syntax</h3>
+					<p class="w-bold">spread syntax</p>
 					<br>
 					<p>Usata quando si chiama<br>una funzione</p>
 					<p>Espande un iterabile<br>in più elementi</p>
 				</div>
 			</section>
 			<section class="wide-slide">
-				<h3><span class="w-important">classi</span></h3>
+				<p class="w-important">classi</p>
 				<div class="w-left">
+					<h4>ES5</h4>
 					<pre><code data-trim data-noescape class="javascript">
 						function Bear(name) {
 							this.name = name;
@@ -286,6 +270,7 @@
 					</code></pre>
 				</div>
 				<div class="w-right">
+					<h4>ES6</h4>
 					<pre><code data-trim data-noescape class="javascript">
 						class Bear {
 							constructor(name) {
@@ -300,12 +285,145 @@
 				</div>
 			</section>
 			<section>
-				<p>In generale nessuna funzione aggiuntiva,<br>solamente sintassi dedicata.</p>
+				<p>In generale nessuna funzione aggiuntiva,<br>solamente sintassi dedicata</p>
 				<br>
-				<p>Possibilità di avere<br>metodi di classe privati<br>con _nomemetodo() {...}</p>
+				<p>Possibilità di avere<br>metodi di classe privati con _</p>
+			</section>
+			<section class="wide-slide">
+				<p class="w-important">let <span style="color: black">&</span> const</p>
+				<div class="w-left">
+					<p>let & const sono block-scoped</p>
+					<pre><code data-trim data-noescape class="javascript">
+						if (havingFun) {
+							let dinner = 'pizza';
+						}
+
+						console.log(dinner); // ReferenceError
+					</code></pre>
+				</div>
+				<div class="w-right">
+					<p>var non è block-scoped</p>
+					<pre><code data-trim data-noescape class="javascript">
+						if (havingFun) {
+							var dinner = 'pizza';
+						}
+
+						console.log(dinner); // pizza
+					</code></pre>
+				</div>
+			</section>
+			<section class="wide-slide">
+				<p class="w-important">array destructuring</p>
+				<div class="w-left">
+					<pre><code data-trim data-noescape class="javascript">
+						var pizzaSizes = ['slice','halfpie','fullpie'];
+
+						var slice = pizzaSizes[0],
+								halfPie = pizzaSizes[1],
+								fullPie = pizzaSizes[2];
+					</code></pre>
+				</div>
+				<div class="w-right">
+					<pre><code data-trim data-noescape class="javascript">
+						let pizzaSizes = ['slice','halfpie','fullpie'];
+
+						let [slice, halfPie, fullPie] = pizzaSizes;
+					</code></pre>
+				</div>
 			</section>
 			<section>
-				<h2>Oggetti</h2>
+				<p class="w-important">object destructuring</p>
+				<pre><code data-trim data-noescape class="javascript">
+					let {lName, fName} = {fName: 'John', age: 15, lName: 'Doe'};
+
+					console.log(lName + ', ' + fName); // Doe, John
+				</code></pre>
+			</section>
+			<section>
+				<h2>Promises</h2>
+			</section>
+			<section>
+				<p>Consente di associare degli handlers con il successo o il fallimento di un'azione asincrona. [...]<br>
+					La funzione che compie del lavoro asincrono non ritorna il valore di completamento ma ritorna una promise, tramite la quale si potrà ottenere il valore di completamento una volta che la promise sarà terminata.</p>
+			</section>
+			<section>
+				<p>Una promessa può essere:</p>
+				<ul>
+					<li>fulfilled - The action relating to the promise succeeded</li>
+					<li>rejected - The action relating to the promise failed</li>
+					<li>pending - Hasn't fulfilled or rejected yet</li>
+					<li>settled - Has fulfilled or rejected</li>
+				</ul>
+			</section>
+			<section>
+				<!-- <img src="./images/promises.png" alt="promises-schema" class="plain" style="max-width:100%;background:none"> -->
+				<pre><code data-trim data-noescape class="javascript">
+					var promise = new Promise(function(resolve, reject) {
+						// do a thing, possibly async, then…
+					
+						if (/* everything turned out fine */) {
+							resolve("Stuff worked!");
+						} else {
+							reject(Error("It broke"));
+						}
+					});
+				</code></pre>
+				<pre><code data-trim data-noescape class="javascript">
+					promise.then(function(result) {
+						console.log(result); // "Stuff worked!"
+					}, function(err) {
+						console.log(err); // Error: "It broke"
+					});
+				</code></pre>
+			</section>
+			<section class="wide-slide">
+				<p>XMLHttpRequest -> Promise</p>
+				<div class="w-left">
+					<pre><code data-trim data-noescape class="javascript">
+						function get(url) {
+							// Return a new promise.
+							return new Promise(function(resolve, reject) {
+								// Do the usual XHR stuff
+								var req = new XMLHttpRequest();
+								req.open('GET', url);
+						
+								req.onload = function() {
+									// This is called even on 404 etc
+									// so check the status
+									if (req.status == 200) {
+										// Resolve the promise
+										resolve(req.response);
+									}
+					</code></pre>
+				</div>
+				<div class="w-right">
+					<pre><code data-trim data-noescape class="javascript">
+									else {
+										// Otherwise reject 
+										// with the status text
+										reject(Error(req.statusText));
+									}
+								};
+								// Handle network errors
+								req.onerror = function() {
+									reject(Error("Network Error"));
+								};
+								// Make the request
+								req.send();
+							});
+						}
+					</code></pre>
+				</div>
+			</section>
+			<section>
+				<p>Puoi concatenare più <code class="javascript">.then()</code> insieme per eseguire ulteriori task asincroni uno dopo l'altro</p>
+				<pre><code data-trim data-noescape class="javascript">
+					get('story.json').then(function(response) {
+						return JSON.parse(response);
+					}).then(function(response) {
+						console.log("Yey JSON!", response);
+					})
+				</code></pre>
 			</section>
 		</div>
 	</div>
