@@ -11,23 +11,25 @@
 	<link rel="stylesheet" href="css/theme/simple.css">
 
 	<!-- Theme used for syntax highlighting of code -->
-	<link rel="stylesheet" href="lib/css/monokai-sublime.css">
+	<link rel="stylesheet" href="lib/css/github-gist.css">
 
 	<!-- custom style -->
 	<style>
-		.hljs {
-			background: #222222;
-			display: inline-block;
-		}
 		.reveal pre {
-			display: inline-block;
-			width: auto;
-			box-shadow: none;
+			display: inline-flex;
+			box-shadow: 0 4px 10px 0 rgba(0,0,0,0.2), 0 4px 20px 0 rgba(0,0,0,0.19);
 		}
+
+		.reveal pre code {
+			font-size: 20px;
+			padding: 15px;
+		}
+
 		.wide-slide {
 			left: -15% !important;
 			width: 130% !important;
 		}
+
 		.w-left {
 			float: left;
 			width: 50%;
@@ -37,8 +39,17 @@
 			float: right;
 			width: 50%;
 		}
-		.important {
+
+		.w-important {
 			color: #fa2771;
+		}
+
+		.w-center-text {
+			text-align: center !important;
+		}
+
+		.w-no-decoration {
+			text-decoration: none !important;
 		}
 	</style>
 
@@ -72,17 +83,8 @@
 					<h3>ES6 = ECMAScript 6 = ES2015</h3>
 					<p>
 						è la sesta edizione di un linguaggio di programmazione standardizzato e mantenuto da Ecma International.
-						L'implementazione più conosciuta di questo linguaggio è <span class="important">JavaScript.</style>
+						L'implementazione più conosciuta di questo linguaggio è <span class="w-important">JavaScript.</style>
 					</p>
-					
-			</textarea>
-			</section>
-			<section data-markdown>
-				<textarea data-template>
-					<p>Requisiti:</p>
-					<ul>
-						<li>Node.js</li>
-					</ul>
 				</textarea>
 			</section>
 			<section>
@@ -96,28 +98,28 @@
 					<p>
 						V8 is Google’s open source high-performance JavaScript engine, written in C++ and used in Google Chrome, the open source
 						browser from Google, and in Node.js, among others.
-						<span class="important">It implements ECMAScript as specified in ECMA-262.</span>
+						<span class="w-important">It implements ECMAScript as specified in ECMA-262.</span>
 					</p>
 				</section>
 			</section>
 			<section>
 				<p>il suo gestore di pacchetti si chiama
-					<span class="important">npm</style>
+					<span class="w-important">npm</style>
 				</p>
 				<code>npm install --save express</code>
 			</section>
 			<section>
 				<p>Cosa è cambiato?</p>
 				<ul>
-					<li>functions</li>
-					<li>objects</li>
+					<li>funzioni</li>
+					<li>oggetti</li>
 					<li>promises & collections</li>
-					<li>iterators & generators</li>
+					<li>iterabili & generatori</li>
 				</ul>
 			</section>
 			<section>
-				<h2>Functions</h2>
-				<p>arrow functions</p>
+				<h2>Funzioni</h2>
+				<p class="w-important">arrow functions</p>
 				<code>() => {...}</code>
 			</section>
 			<section class="wide-slide">
@@ -146,23 +148,164 @@
 						</code></pre>
 				</div>
 			</section>
+			<section class="wide-slide">
+				<h4>non associazione di <span class="w-important">this</span></h4>
+				<div class="w-left">
+					<h4>ES5</h4>
+					<pre>
+						<code data-trim data-noescape class="javascript">
+							function Person() {
+								this.age = 0;
+							
+								setInterval(function growUp() {
+									this.age++;
+								}, 1000);
+							}
+						</code>
+					</pre>
+					<pre>
+						<code data-trim data-noescape class="console">
+							> var p = new Person();
+							> p.age
+							0
+							> p.age
+							0
+							> p.age
+							0
+							...
+						</code>
+					</pre>
+				</div>
+				<div class="w-right">
+					<h4>ES6</h4>
+					<pre>
+						<code data-trim data-noescape class="javascipt">
+							function Person() {
+								this.age = 0;
+							
+								setInterval(() => {
+									this.age++;
+								}, 1000);
+							}
+						</code>
+					</pre>
+					<pre>
+						<code data-trim data-noescape class="console">
+							> var p = new Person();
+							> p.age
+							1
+							> p.age
+							2
+							> p.age
+							3
+							...
+						</code>
+					</pre>
+				</div>
+			</section>
 			<section>
-				<section>
-					<p>l'utilizzo ideale è quando si deve passare una funzione come argomento di un'altra funzione:</p>
+				<h4>sintassi più compatta</h4>
+				<pre><code data-trim data-noescape class="javascript">
+					var filtered = [12, 13, 14].map(val => { return val > 12; })
+				</code></pre>
+			</section>
+			<section class="wide-slide">
+				<h2>Funzioni</h2>
+				<p class="w-important">default parameters</p>
+				<div class="w-left">
+					<h4>ES5</h4>
 					<pre><code data-trim data-noescape class="javascript">
-						orderPizza('Cheese', (pizza, totalCost) => {
-							console.log('Ordered ' + pizza + ' for ' + totalCost);
-						});
+						function multiply(a, b) {
+							b = (typeof b !== 'undefined') ?  b : 1;
+							return a * b;
+						}
 					</code></pre>
-					<ul>
-						<li>se l'argomento è solo uno allora le parentesi non sono necessarie</li>
-						<li>se l'espressione è solo una allora puoi eliminare le parentesi e il return statement</li>
-					</ul>
-					<p></p>
+				</div>
+				<div class="w-right">
+					<h4>ES6</h4>
 					<pre><code data-trim data-noescape class="javascript">
-						pizza => bake(pizza);
+						function multiply(a, b = 1) {
+							return a * b;
+						}
 					</code></pre>
-				</section>
+				</div>				
+			</section>
+			<section class="wide-slide">
+				<h2>Funzioni</h2>
+				<p><span class="w-important">rest parameters</span> & <span class="w-important">spread syntax</span></p>
+				<div class="w-left">
+					<pre><code data-trim data-noescape class="javascript">
+						function pet(...puppies) {
+							for (var i = 0; i < puppies.length; i++) {
+								puppies[i].pet();
+							}
+						}
+	
+						> pet('jojo', 'sammy', 'kilroy', 'jonboy');
+					</code></pre>
+				</div>
+				<div class="w-right">
+					<pre><code data-trim data-noescape class="javascript">
+						function BugHunter(name, age, favInsect) {
+							this.name = name;
+							this.age = age;
+							this.favInsect = favInsect;
+						}
+
+						var kimHunter = ['Kim', 27, 'Dung Beetle'];
+
+						var hunter = new BugHunter(...kimHunter);
+					</code></pre>
+				</div>
+			</section>
+			<section class="wide-slide">
+				<div class="w-left">
+					<h3>rest parameters</h3>
+					<br>
+					<p>Usati nella dichiarazione<br>della funzione</p>
+					<p>Combina argomenti<br>senza nome</p>
+				</div>
+				<div class="w-right">
+					<h3>spread syntax</h3>
+					<br>
+					<p>Usata quando si chiama<br>una funzione</p>
+					<p>Espande un iterabile<br>in più elementi</p>
+				</div>
+			</section>
+			<section class="wide-slide">
+				<h3><span class="w-important">classi</span></h3>
+				<div class="w-left">
+					<pre><code data-trim data-noescape class="javascript">
+						function Bear(name) {
+							this.name = name;
+
+							this.slogan = function() {
+								console.log('Only you...');
+							};
+						}
+					</code></pre>
+				</div>
+				<div class="w-right">
+					<pre><code data-trim data-noescape class="javascript">
+						class Bear {
+							constructor(name) {
+								this.name = name;
+							}
+
+							slogan() {
+								console.log('Only you...');
+							}
+						}
+					</code></pre>
+				</div>
+			</section>
+			<section>
+				<p>In generale nessuna funzione aggiuntiva,<br>solamente sintassi dedicata.</p>
+				<br>
+				<p>Possibilità di avere<br>metodi di classe privati<br>con _nomemetodo() {...}</p>
+			</section>
+			<section>
+				<h2>Oggetti</h2>
 			</section>
 		</div>
 	</div>
