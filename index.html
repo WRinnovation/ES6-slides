@@ -21,6 +21,7 @@
 		}
 
 		.reveal pre code {
+			max-height: none;
 			font-size: 20px;
 			padding: 15px;
 		}
@@ -116,8 +117,9 @@
 				<p>Cosa è cambiato?</p>
 				<ul>
 					<li>funzioni & oggetti</li>
-					<li>promises & funzioni asincrone</li>
-					<li>collections, iteratori & generatori</li>
+					<li>promises & funzioni asincrone (ES7 bonus)</li>
+					<li>iteratori & generatori</li>
+					<li>collections</li>
 				</ul>
 			</section>
 			<section>
@@ -347,12 +349,12 @@
 					La funzione che compie del lavoro asincrono non ritorna il valore di completamento ma ritorna una promise, tramite la quale si potrà ottenere il valore di completamento una volta che la promise sarà terminata.</p>
 			</section>
 			<section>
-				<p>Una promessa può essere:</p>
+				<p>Una promise può essere:</p>
 				<ul>
-					<li>fulfilled - The action relating to the promise succeeded</li>
-					<li>rejected - The action relating to the promise failed</li>
-					<li>pending - Hasn't fulfilled or rejected yet</li>
-					<li>settled - Has fulfilled or rejected</li>
+					<li>fulfilled - L'azione legata alla promessa è andata a buon fine</li>
+					<li>rejected - L'azione legata alla promessa è fallita</li>
+					<li>pending - Non è stata ancora soddisfatta o respinta</li>
+					<li>settled - È stata soddisfatta o respinta</li>
 				</ul>
 			</section>
 			<section>
@@ -376,8 +378,14 @@
 					});
 				</code></pre>
 			</section>
+			<section>
+				<p class="w-important">compatibilità</p>
+				<p>Chrome 32, Opera 19, Firefox 29, Safari 8 & Microsoft Edge, promises sono abilitate di default.</p>
+				<p>...per tutto il resto c'è il
+					<a href="https://github.com/jakearchibald/ES6-Promises#readme">polyfill</a> (2k gzippato)</p>
+			</section>
 			<section class="wide-slide">
-				<p>XMLHttpRequest -> Promise</p>
+				<p>XMLHttpRequest -> promise</p>
 				<div class="w-left">
 					<pre><code data-trim data-noescape class="javascript">
 						function get(url) {
@@ -416,7 +424,16 @@
 				</div>
 			</section>
 			<section>
-				<p>Puoi concatenare più <code class="javascript">.then()</code> insieme per eseguire ulteriori task asincroni uno dopo l'altro</p>
+				<!-- <p>Puoi concatenare più <code class="javascript">.then()</code> insieme per eseguire ulteriori task asincroni uno dopo l'altro</p> -->
+				<pre><code data-trim data-noescape class="javascript">
+					get('story.json').then(function(response) {
+						console.log("Success!", response);
+					}, function(error) {
+						console.error("Failed!", error);
+					})
+				</code></pre>
+			</section>
+			<section>
 				<pre><code data-trim data-noescape class="javascript">
 					get('story.json').then(function(response) {
 						return JSON.parse(response);
@@ -424,6 +441,252 @@
 						console.log("Yey JSON!", response);
 					})
 				</code></pre>
+				<pre><code data-trim data-noescape class="javascript">
+					get('story.json').then(JSON.parse).then(function(response) {
+						console.log("Yey JSON!", response);
+					})
+				</code></pre>
+				<pre><code data-trim data-noescape class="javascript">
+					function getJSON(url) {
+						return get(url).then(JSON.parse);
+					}
+				</code></pre>
+				<pre><code data-trim data-noescape class="javascript">
+					function getJSON(url) {
+						return get(url).then(JSON.parse).catch(function(err) {
+							console.log("getJSON failed for", url, err);
+							throw err;
+						});
+					}
+				</code></pre>
+			</section>
+			<section>
+				<p>jQuery Deferred -> promise</p>
+				<pre><code data-trim data-noescape class="javascript">
+					var jsPromise = Promise.resolve($.ajax('/whatever.json'))
+				</code></pre>
+			</section>
+			<section>
+				<pre><code data-trim data-noescape class="javascript">
+					function logFetch(url) {
+						return fetch(url)
+							.then(response => response.text())
+							.then(text => {
+								console.log(text);
+							}).catch(err => {
+								console.error('fetch failed', err);
+							});
+					}
+				</code></pre>
+				<p>...non molto comodo</p>
+			</section>
+			<section>
+				<h1>ES7</h1>
+				<p class="w-important">spoiler alert!</p>
+			</section>
+			<section>
+				<h2>async functions</h2>
+				<pre><code data-trim data-noescape class="javascript">
+					async function myFirstAsyncFunction() {
+						try {
+							const fulfilledValue = await promise;
+						}
+						catch (rejectedValue) {
+							// …
+						}
+					}
+				</code></pre>
+			</section>
+			<section class="wide-slide">
+				<p>scrivere codice promise-based come fosse sincrono</p>
+				<div class="w-left">
+					<pre><code data-trim data-noescape class="javascript">
+						function logFetch(url) {
+							return fetch(url)
+								.then(response => response.text())
+								.then(text => {
+									console.log(text);
+								}).catch(err => {
+									console.error('fetch failed', err);
+								});
+						}
+					</code></pre>
+				</div>
+				<div class="w-right">
+					<pre><code data-trim data-noescape class="javascript">
+						async function logFetch(url) {
+							try {
+								const response = await fetch(url);
+								console.log(await response.text());
+							}
+							catch (err) {
+								console.log('fetch failed', err);
+							}
+						}
+					</code></pre>
+				</div>
+			</section>
+			<section>
+				<p>...anche con le arrow functions</p>
+				<pre><code data-trim data-noescape class="javascript">
+					// map some URLs to json-promises, fetching in parallel
+					const jsonPromises = urls.map(async url => {
+						const response = await fetch(url);
+						return response.json();
+					});
+				</code></pre>
+				<pre><code data-trim data-noescape class="javascript">
+					async function logInOrder(urls) {
+						// fetch all the URLs in parallel
+						const textPromises = urls.map(async url => {
+							const response = await fetch(url);
+							return response.text();
+						});
+
+						// log them in sequence
+						for (const textPromise of textPromises) {
+							console.log(await textPromise);
+						}
+					}
+				</code></pre>
+			</section>
+			<section>
+				<p class="w-important">compatibilità</p>
+				<p>async functions sono abilitate di default in Chrome, Edge, Firefox, e Safari.</p>
+				<p>con un workaround puoi scriverle tramite i <span class="w-important">generatori</span></p>
+			</section>
+			<section>
+				<h2>Iteratori</h2>
+				<p>An object is an iterator when it knows how to access items from a collection one at a time, while keeping track of its current
+					position within that sequence. In JavaScript an iterator is an object that provides a next() method which returns the next
+					item in the sequence.<br>- MDN</p>
+			</section>
+			<section>
+				<pre><code data-trim data-noescape class="javascript">
+					function makeIterator(array) {
+						var nextIndex = 0;
+						
+						return {
+							next: function() {
+								return nextIndex < array.length ?
+									{value: array[nextIndex++], done: false} :
+									{done: true};
+							}
+						};
+					}
+				</code></pre>
+				<pre><code data-trim data-noescape class="javascript">
+					var it = makeIterator(['yo', 'ya']);
+					console.log(it.next().value); // 'yo'
+					console.log(it.next().value); // 'ya'
+					console.log(it.next().done);  // true
+				</code></pre>
+			</section>
+			<section>
+				<h2>Generatori</h2>
+				<p>allow you to define an iterative algorithm by writing a single function which can maintain its own state.<br>- MDN</p>
+			</section>
+			<section>
+				<pre><code data-trim data-noescape class="javascript">
+					function* idMaker() {
+						var index = 0;
+						while(true)
+							yield index++;
+					}
+
+					var gen = idMaker();
+
+					console.log(gen.next().value); // 0
+					console.log(gen.next().value); // 1
+					console.log(gen.next().value); // 2
+					// ...
+				</code></pre>
+			</section>
+			<section>
+				<h2>Iterabili</h2>
+				<p>An object is iterable if it defines its iteration behavior [...]<br>In order to be iterable, an object must implement the @@iterator method<br> - MDN</p>
+			</section>
+			<section class="wide-slide">
+				<div class="w-left">
+					<pre><code data-trim data-noescape class="javascript">
+						let fibonacci = {
+							[Symbol.iterator]() {
+								let pre = 0, cur = 1;
+								return {
+								next() {
+									[pre, cur] = [cur, pre + cur];
+									return { done: false, value: cur }
+								}
+								}
+							}
+						}
+
+						for (var n of fibonacci) {
+							// truncate the sequence at 1000
+							if (n > 1000)
+								break;
+							console.log(n);
+						}
+					</code></pre>
+				</div>
+				<div class="w-right">
+					<pre><code data-trim data-noescape class="javascript">
+						var fibonacci = {
+							[Symbol.iterator]: function*() {
+								var pre = 0, cur = 1;
+								for (;;) {
+									var temp = pre;
+									pre = cur;
+									cur += temp;
+									yield cur;
+								}
+							}
+						}
+
+						for (var n of fibonacci) {
+							// truncate the sequence at 1000
+							if (n > 1000)
+								break;
+							console.log(n);
+						}
+					</code></pre>
+				</div>
+			</section>
+			<section>
+				<h2>Collections</h2>
+				<p class="w-important">Map <span style="color: black">&</span> Set</p>
+			</section>
+			<section class="wide-slide">
+				<div class="w-left">
+					<pre><code data-trim data-noescape class="javascript">
+						// Sets
+						var s = new Set();
+						s.add("hello").add("goodbye").add("hello");
+						s.size === 2;
+						s.has("hello") === true;
+					</code></pre>
+				</div>
+				<div class="w-right">
+					<pre><code data-trim data-noescape class="javascript">
+						// Maps
+						var m = new Map();
+						m.set("hello", 42);
+						m.set(s, 34);
+						m.get(s) == 34;
+					</code></pre>
+				</div>
+			</section>
+			<section>
+				<h4>Risorse</h4>
+				<ul>
+					<li><a href="https://babeljs.io/learn-es2015/">Babel</a></li>
+					<li><a href="https://developers.google.com/web/fundamentals/primers/promises">Promises</a></li>
+					<li><a href="https://developers.google.com/web/fundamentals/primers/async-functions">Async</a></li>
+					<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Iterators_and_Generators">Iteratori & generatori</a></li>
+				</ul>
+			</section>
+			<section>
+				<p>grazie per l'attenzione!</p>
 			</section>
 		</div>
 	</div>
