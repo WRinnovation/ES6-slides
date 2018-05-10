@@ -116,11 +116,77 @@
 			<section>
 				<p>Cosa è cambiato?</p>
 				<ul>
+					<li>moduli</li>
 					<li>funzioni & oggetti</li>
 					<li>promises & funzioni asincrone (ES7 bonus)</li>
 					<li>iteratori & generatori</li>
 					<li>collections</li>
 				</ul>
+			</section>
+			<section>
+				<h2>Moduli</h2>
+				<pre style="width: fit-content;"><code data-trim data-noescape class="javascript">
+					import _ from 'lodash'
+				</code></pre>
+			</section>
+			<section class="wide-slide">
+				<div class="w-left">
+					<h4>CommonJS Modules</h4>
+					<p>l'implementazione principale di questo standard è in Node.js</p>
+					<pre><code data-trim data-noescape class="javascript">
+						//------ lib.js ------
+						var sqrt = Math.sqrt;
+
+						module.exports = {
+							sqrt: sqrt
+						};
+
+						//------ main.js ------
+						var mysqrt = require('lib').sqrt;
+					</code></pre>
+				</div>
+				<div class="w-right">
+					<h4>Asynchronous Module Definition (AMD)</h4>
+					<p>l'implementazione principale di questo standard è RequireJS</p>
+				</div>
+			</section>
+			<section class="wide-slide">
+				<h4>ES6</h4>
+				<div class="w-left">
+					<pre><code data-trim data-noescape class="javascript">
+						//------ lib.js ------
+						export const sqrt = Math.sqrt;
+						export function square(x) {
+							return x * x;
+						}
+						export function diag(x, y) {
+							return sqrt(square(x) + square(y));
+						}
+						
+						//------ main.js ------
+						import { square, diag } from 'lib';
+						console.log(square(11)); // 121
+						console.log(diag(4, 3)); // 5
+					</code></pre>
+				</div>
+				<div class="w-right">
+					<pre class="fragment fade-down"><code data-trim data-noescape class="javascript">
+						//------ myFunc.js ------
+						export default function () { ... };
+						
+						//------ main1.js ------
+						import myFunc from 'myFunc';
+						myFunc();
+					</code></pre>
+					<pre class="fragment fade-up"><code data-trim data-noescape class="javascript">
+						//------ underscore.js ------
+						export default function (obj) { ... };
+						export function each(obj, iterator) { ... };
+						
+						//------ main.js ------
+						import _, { each } from 'underscore';
+					</code></pre>
+				</div>
 			</section>
 			<section>
 				<h2>Funzioni & Oggetti</h2>
@@ -190,11 +256,30 @@
 					</code></pre>
 				</div>
 			</section>
-			<section>
+			<section class="wide-slide">
 				<p>sintassi più compatta</p>
-				<pre><code data-trim data-noescape class="javascript">
-					var filtered = [12, 13, 14].map(val => { return val > 12; })
-				</code></pre>
+				<div style="float:left;width:87%">
+					<pre><code data-trim data-noescape class="javascript">
+						var filtered = [12, 13, 14].map(function(val) {
+							return val > 12; 
+						})
+					</code></pre>
+					<pre class="fragment fade-up"><code data-trim data-noescape class="javascript">
+						var filtered = [12, 13, 14].map((val) => { return val > 12; })
+					</code></pre>
+					<pre class="fragment fade-up"><code data-trim data-noescape class="javascript">
+						var filtered = [12, 13, 14].map(val => { return val > 12; })
+					</code></pre>
+					<pre class="fragment fade-up"><code data-trim data-noescape class="javascript">
+						var filtered = [12, 13, 14].map(val => val > 12)
+					</code></pre>
+					<pre class="fragment fade-up"><code data-trim data-noescape class="javascript">
+						var filtered = [12, 13, 14].map(_ => _ > 12 )
+					</code></pre>
+				</div>
+				<div style="float:left;width:13%">
+					<img src="./images/exp-brain.jpg">
+				</div>
 			</section>
 			<section class="wide-slide">
 				<p class="w-important">default parameters</p>
@@ -217,44 +302,69 @@
 				</div>				
 			</section>
 			<section class="wide-slide">
-				<p><span class="w-important">rest parameters</span> & <span class="w-important">spread syntax</span></p>
+				<p><span class="w-important">spread syntax</span></p>
 				<div class="w-left">
-					<pre><code data-trim data-noescape class="javascript">
-						function pet(...puppies) {
-							for (var i = 0; i < puppies.length; i++) {
-								puppies[i].pet();
-							}
-						}
-	
-						> pet('jojo', 'sammy', 'kilroy', 'jonboy');
-					</code></pre>
-				</div>
-				<div class="w-right">
+					<h4>ES5</h4>
 					<pre><code data-trim data-noescape class="javascript">
 						function BugHunter(name, age, favInsect) {
 							this.name = name;
 							this.age = age;
 							this.favInsect = favInsect;
 						}
-
+	
 						var kimHunter = ['Kim', 27, 'Dung Beetle'];
-
+	
+						BugHunter.apply(null, kimHunter);
+					</code></pre>
+				</div>
+				<div class="w-right">
+					<h4>ES6</h4>
+					<pre><code data-trim data-noescape class="javascript">
+						function BugHunter(name, age, favInsect) {
+							this.name = name;
+							this.age = age;
+							this.favInsect = favInsect;
+						}
+	
+						var kimHunter = ['Kim', 27, 'Dung Beetle'];
+	
 						var hunter = new BugHunter(...kimHunter);
 					</code></pre>
 				</div>
 			</section>
 			<section class="wide-slide">
-				<div class="w-left">
-					<p class="w-bold">rest parameters</p>
-					<br>
-					<p>Usati nella dichiarazione<br>della funzione</p>
-					<p>Combina argomenti<br>senza nome</p>
+				<p><span class="w-important">rest parameters</span></p>
+				<div style="float:left;width: 65%">
+					<h4>ES5</h4>
+					<pre><code data-trim data-noescape class="javascript">
+						function f(a, b) {
+							var args = Array.prototype.slice.call(arguments, f.length);
+						
+							// …
+						}						
+					</code></pre>
 				</div>
-				<div class="w-right">
+				<div style="float:left;width: 35%">
+					<h4>ES6</h4>
+					<pre><code data-trim data-noescape class="javascript">
+						function f(a, b, ...args) {
+							// …
+						}
+					</code></pre>
+				</div>
+			</section>
+			<section class="wide-slide">
+				<div class="w-left">
 					<p class="w-bold">spread syntax</p>
 					<br>
 					<p>Usata quando si chiama<br>una funzione</p>
 					<p>Espande un iterabile<br>in più elementi</p>
+				</div>
+				<div class="w-right">
+					<p class="w-bold">rest parameters</p>
+					<br>
+					<p>Usati nella dichiarazione<br>della funzione</p>
+					<p>Combina argomenti<br>senza nome</p>
 				</div>
 			</section>
 			<section class="wide-slide">
@@ -339,6 +449,37 @@
 					let {lName, fName} = {fName: 'John', age: 15, lName: 'Doe'};
 
 					console.log(lName + ', ' + fName); // Doe, John
+				</code></pre>
+			</section>
+			<section class="wide-slide">
+				<p class="w-important">object literal property value shorthand</p>
+				<div style="float:left;width: 57%">
+					<h4>ES5</h4>
+					<pre><code data-trim data-noescape class="javascript">
+						function createMonster(name, power) {
+							return { type: 'Monster', name: name, power: power };
+						}
+					</code></pre>
+				</div>
+				<div style="float:left;width: 43%">
+					<h4>ES6</h4>
+					<pre><code data-trim data-noescape class="javascript">
+						function createMonster(name, power) {
+							return { type: 'Monster', name, power };
+						}
+					</code></pre>
+				</div>
+			</section>
+			<section>
+				<pre><code data-trim data-noescape class="javascript">
+					books.forEach(function ({title: title, author: author}) {
+						console.log(title, 'is written by', author);
+					});
+				</code></pre>
+				<pre><code data-trim data-noescape class="javascript">
+					books.forEach(function ({title, author}) {
+						console.log(title, 'is written by', author);
+					});
 				</code></pre>
 			</section>
 			<section>
